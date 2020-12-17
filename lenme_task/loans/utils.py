@@ -1,6 +1,8 @@
+from django.utils import timezone
+
 from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import json
 
@@ -17,5 +19,5 @@ def schedule_payment(loan_object):
             task='loans.tasks.schedule_borrower_payment_every_month',
             args=json.dumps([loan_object.id]),
             # schedule expires after completing loan_period
-            expires=datetime.utcnow() + timedelta(days=30*loan_object.loan_period)
+            expires=timezone.now() + timedelta(days=30*loan_object.loan_period)
     )
